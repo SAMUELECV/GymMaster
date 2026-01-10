@@ -1,0 +1,12 @@
+com\mycompany\code\StatoAbbonamento.class
+com\mycompany\code\Abbonamento.class
+com\mycompany\code\AbbonamentoFactory.class
+com\mycompany\code\GymMaster.class
+com\mycompany\code\TrimestraleFactory.class
+com\mycompany\code\TipoAbbonamento.class
+com\mycompany\code\AnnualeFactory.class
+com\mycompany\code\GestorePalestra.class
+com\mycompany\code\MensileFactory.class
+com\mycompany\code\AddettoSegreteria.class
+com\mycompany\code\Code.class
+com\mycompany\code\Iscritto.class
