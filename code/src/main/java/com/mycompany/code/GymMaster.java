@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  *
@@ -18,27 +19,44 @@ public class GymMaster {
 
     private Map<Iscritto, String> iscritti;
     private Map<Abbonamento, Integer> abbonamenti;
+    private Map<Prenotazione, Integer> prenotazioni;
+    private Map<Corso, String> corsi;
+    private Map<Lezione, String> lezioni;
+    
+    private Sala sala; //sala unica per semplicità
     
     private GestorePalestra gestorePalestra;
     private TipoAbbonamento tipoAbbonamentoSelezionato;
     private Iscritto iscrittoCorrente;
+    private Corso corsoCorrente;
+    private Lezione lezioneCorrente;
+    private Prenotazione prenotazioneCorrente;
     private int contatoreidAbbonamento;
     private int contatoreidPrenotazione;
     private String opzione;
     private AbbonamentoFactory abbonamentoFactory;
+    private CalendarioLezioni calendarioLezioni;
     
     private SimpleDateFormat sdfOutput = new SimpleDateFormat("EEEE dd MMMM yyyy HH:mm:ss", java.util.Locale.ITALIAN);
     
     public GymMaster() {
         this.iscritti = new HashMap<>();
-        this.abbonamenti = new HashMap<>();   
+        this.abbonamenti = new HashMap<>(); 
+        this.prenotazioni = new HashMap<>();
+        this.corsi = new HashMap<>();
+        this.lezioni = new HashMap<>();
+        this.sala = null;
         this.gestorePalestra = null;
         this.tipoAbbonamentoSelezionato = null;
         this.iscrittoCorrente = null;
+        this.corsoCorrente = null;
+        this.lezioneCorrente = null;
+        this.prenotazioneCorrente = null;
         this.contatoreidAbbonamento = 1;
         this.contatoreidPrenotazione = 1;
         this.opzione = "";
         this.abbonamentoFactory = null;
+        this.calendarioLezioni = new CalendarioLezioni();
     }
     
     private Iscritto findIscrittoByCF(String CF) {
@@ -63,6 +81,42 @@ public class GymMaster {
         for (Abbonamento a : abbonamenti.keySet()) {
             if (a.getCFIscritto() != null && a.getCFIscritto().equals(CF)) {
                 return a;
+            }
+        }
+        return null;
+    }
+    
+        private Prenotazione findPrenotazioneById(int id) {
+        for (Map.Entry<Prenotazione, Integer> entry : prenotazioni.entrySet()) {
+            if (entry.getValue().equals(id)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+    
+    private Corso findCorsoByNome(String nome) {
+        for (Map.Entry<Corso, String> entry : corsi.entrySet()) {
+            if (entry.getValue().equals(nome)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+    
+    private Lezione findLezioneById(String id) {
+        for (Map.Entry<Lezione, String> entry : lezioni.entrySet()) {
+            if (entry.getValue().equals(id)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+    
+    private Lezione findLezioneByDataOra(Date data, double orainizio) {
+        for (Lezione l : lezioni.keySet()) {
+            if (l.getOrainizio() == orainizio) {
+                return l;
             }
         }
         return null;
@@ -216,10 +270,280 @@ public class GymMaster {
         System.out.println("Abbonamento salvato - ID: " + a.getIdabbonamento());
     }
     
+    public Lezione visualizzaLezioniECorsi(String CF) {
+        Iscritto i = findIscrittoByCF(CF);
+        if (i == null) {
+            System.out.println("Iscritto non trovato!");
+            return null;
+        }
+        this.iscrittoCorrente = i;
+        
+        Abbonamento a = i.getAbbonamentoCorrente();
+        if (a == null) {
+            System.out.println("Nessun abbonamento attivo!");
+            return null;
+        }
+        
+        if (!a.controlloScadenza(new Date())) {
+            System.out.println("Abbonamento scaduto!");
+            return null;
+        }
+        
+        boolean lezionedigruppo = a.getTipo().verificaTipoAbbonamento();
+        
+        if (lezionedigruppo) {
+            System.out.println("\n=== CORSI DISPONIBILI ===");
+            for (Corso c : corsi.keySet()) {
+                System.out.println("- " + c.getNomecorso() + " | Istruttore: " + c.getIstruttorepredefinito());
+            }
+            
+            System.out.println("\n=== LEZIONI DISPONIBILI ===");
+            for (Lezione l : lezioni.keySet()) {
+                System.out.println("- " + l.getIDLezione() + " | " + l.getGiorno() + " | Ora: " + l.getOrainizio() + " | Posti: " + l.getPostidisponibili());
+            }
+            
+            return lezioni.keySet().stream().findFirst().orElse(null);
+        }
+        System.out.println("Il tuo abbonamento non include lezioni di gruppo!");
+        return null;
+    }
+    
+    public Lezione selezionaCorso(String nomecorso) {
+        Corso c = findCorsoByNome(nomecorso);
+        if (c == null) {
+            System.out.println("Corso non trovato!");
+            return null;
+        }
+        this.corsoCorrente = c;
+        
+        System.out.println("\n--- Lezioni del corso " + nomecorso + " ---");
+        for (Lezione l : c.getLezioni()) {
+            System.out.println("- " + l.getIDLezione() + " | " + l.getGiorno() + " | Ora: " + l.getOrainizio());
+        }
+        return c.getLezioni().isEmpty() ? null : c.getLezioni().get(0);
+    }
+    
+    public Prenotazione prenotaLezione(Date data, double orainizio) {
+        Lezione l = findLezioneByDataOra(data, orainizio);
+        
+        if (l == null) {
+            System.out.println("Lezione non trovata!");
+            return null;
+        }
+        
+        if (l.getPostidisponibili() <= 0) {
+            System.out.println("Nessun posto disponibile!");
+            return null;
+        }
+        
+        if (l.getStatolezione() == StatoLezione.TERMINATA) {
+            System.out.println("Lezione gia' terminata!");
+            return null;
+        }
+        
+        this.lezioneCorrente = l;
+        
+        Prenotazione p = new Prenotazione(data, String.valueOf(orainizio), 
+                                          StatoPrenotazione.EFFETTUATA, contatoreidPrenotazione);
+        
+        p.setStatoPrenotazione(p, StatoPrenotazione.EFFETTUATA);
+        p.setLezione(l);
+        p.setCFIscritto(iscrittoCorrente.getCF());
+        
+        prenotazioni.put(p, contatoreidPrenotazione);
+        contatoreidPrenotazione++;
+        
+        l.decrementaPostiDisponibili();
+        
+        return p;
+    }
+    
+    public boolean visualizzaPrenotazioni(String CF) {
+        Iscritto i = findIscrittoByCF(CF);
+        if (i == null) {
+            System.out.println("Iscritto non trovato!");
+            return false;
+        }
+        this.iscrittoCorrente = i;
+        
+        System.out.println("\n=== PRENOTAZIONI DI " + i.getNomeiscritto() + " " + i.getCognome() + " ===");
+        boolean trovate = false;
+        for (Prenotazione p : prenotazioni.keySet()) {
+            if (p.getCFIscritto() != null && p.getCFIscritto().equals(CF)) {
+                trovate = true;
+                Lezione l = p.getLezione();
+                if (l != null) {
+                    System.out.println("- ID: " + p.getIdprenotazione() + " | Ora: " + p.getOraprenotazione() + " | Stato: " + p.getStatoprenotazione());
+                }
+            }
+        }
+        if (!trovate) {
+            System.out.println("Nessuna prenotazione trovata.");
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean selezionaPrenotazione(int idprenotazione, String oraprenotazione) {
+        Prenotazione p = findPrenotazioneById(idprenotazione);
+        if (p == null) {
+            System.out.println("Prenotazione non trovata!");
+            return false;
+        }
+
+        if (p.getStatoprenotazione() == StatoPrenotazione.ANNULLATA) {
+            System.out.println("Questa prenotazione e' gia' stata annullata! Non puoi selezionarla.");
+            return false;
+        }
+
+        this.prenotazioneCorrente = p;
+
+        Lezione l = p.getLezione();
+        if (l != null) {
+            this.lezioneCorrente = l.getLezione();
+        }
+
+        System.out.println("Prenotazione selezionata - ID: " + p.getIdprenotazione() + " | Stato: " + p.getStatoprenotazione());
+        return true;
+    }
+    
+    public void confermaCancellazione(int idprenotazione) {
+        Prenotazione p = findPrenotazioneById(idprenotazione);
+        if (p == null) {
+            System.out.println("Prenotazione non trovata!");
+            return;
+        }
+        
+        Calendar cal = Calendar.getInstance();
+        double orattuale = cal.get(Calendar.HOUR_OF_DAY) + (cal.get(Calendar.MINUTE) / 60.0);
+        double oraPrenotazione = Double.parseDouble(p.getOraprenotazione());
+        
+        if (orattuale < oraPrenotazione - 2) {
+            p.setStatoPrenotazione(p, StatoPrenotazione.ANNULLATA);
+            
+            Lezione l = p.getLezione();
+            if (l != null) {
+                l.incrementaPostiDisponibili(l);
+            }
+            System.out.println("Prenotazione annullata con successo!");
+        } else {
+            System.out.println("Impossibile cancellare: mancano meno di 2 ore alla lezione!");
+        }
+    }
+    
+    public Corso inserisciNuovoCorso(String nomecorso, String descrizione, String istruttorepredefinito) {
+        Corso c = new Corso(nomecorso, descrizione, istruttorepredefinito);
+        corsi.put(c, nomecorso);
+        this.corsoCorrente = c;
+        System.out.println("Corso creato: " + nomecorso);
+        return c;
+    }
+    
+    public Lezione inserimentoLezioni(String giorno, double orarioinizio, int postidisponibili,
+                                      int maxposti, double durata, StatoLezione statolezione, 
+                                      Date data, String istruttore, String IDLezione) {
+        boolean disponibilita = true;
+        if (sala != null) {
+            disponibilita = sala.isDisponibile(data, orarioinizio, durata, "SalaUnica");
+        }
+        
+        if (disponibilita) {
+            Lezione l = new Lezione(giorno, orarioinizio, postidisponibili, maxposti,
+                                    "SalaUnica", durata, statolezione, data, istruttore, IDLezione);
+            
+            l.setStatoLezione(StatoLezione.NON_INIZIATA);
+            l.attach(calendarioLezioni);
+            lezioni.put(l, IDLezione);
+            
+            if (corsoCorrente != null) {
+                corsoCorrente.addLezione(l);
+            }
+            System.out.println("Lezione creata: " + IDLezione);
+            return l;
+        }
+        System.out.println("Sala non disponibile!");
+        return null;
+    }
+    
+    public String getOpzione() { return this.opzione; }
+    public void setOpzione(String opzione) { this.opzione = opzione; }
+    
+    public void visualizzaCalendarioLezioni(int scelta, String valore) {
+        System.out.println("\n=== CALENDARIO LEZIONI ===");
+        
+        boolean trovate = false;
+        
+        switch (scelta) {
+            case 1:
+                System.out.println("Filtro per giorno: " + valore);
+                for (Lezione l : lezioni.keySet()) {
+                    if (l.getByGiorno(valore) != null) {
+                        trovate = true;
+                        System.out.println("- " + l.getIDLezione() + " | " + l.getGiorno() + " | Ora: " + l.getOrainizio() + " | Istruttore: " + l.getIstruttore() + " | Posti: " + l.getPostidisponibili());
+                    }
+                }
+                break;
+            case 2:
+                System.out.println("Filtro per corso: " + valore);
+                Corso c = findCorsoByNome(valore);
+                if (c != null) {
+                    for (Lezione l : c.getLezioni()) {
+                        trovate = true;
+                        System.out.println("- " + l.getIDLezione() + " | " + l.getGiorno() + " | Ora: " + l.getOrainizio() + " | Istruttore: " + l.getIstruttore() + " | Posti: " + l.getPostidisponibili());
+                    }
+                } else {
+                    System.out.println("Corso non trovato!");
+                }
+                break;
+            case 3:
+                System.out.println("Filtro per istruttore: " + valore);
+                for (Lezione l : lezioni.keySet()) {
+                    if (l.getByIstruttore(valore) != null) {
+                        trovate = true;
+                        System.out.println("- " + l.getIDLezione() + " | " + l.getGiorno() + " | Ora: " + l.getOrainizio() + " | Istruttore: " + l.getIstruttore() + " | Posti: " + l.getPostidisponibili());
+                    }
+                }
+                break;
+            default:
+                System.out.println("Opzione non valida!");
+                return;
+        }
+        
+        if (!trovate && scelta != 2) {
+            System.out.println("Nessuna lezione trovata con i criteri specificati.");
+        }
+    }
+    
+    public Lezione selezionaLezioneSpecifica(String IDLezione) {
+        Lezione l = findLezioneById(IDLezione);
+        if (l != null) {
+            l = l.getLezioneSpecifica(IDLezione);
+            this.lezioneCorrente = l;
+            System.out.println("\n--- Dettagli Lezione ---");
+            System.out.println("ID: " + l.getIDLezione());
+            System.out.println("Giorno: " + l.getGiorno());
+            System.out.println("Ora inizio: " + l.getOrainizio());
+            System.out.println("Durata: " + l.getDurata() + " ore");
+            System.out.println("Istruttore: " + l.getIstruttore());
+            System.out.println("Posti disponibili: " + l.getPostidisponibili() + "/" + l.getMaxposti());
+            System.out.println("Stato: " + l.getStatolezione());
+            return l;
+        }
+        System.out.println("Lezione non trovata!");
+        return null;
+    }
+    
     public void setGestorePalestra(GestorePalestra gestore) { this.gestorePalestra = gestore; }
     public GestorePalestra getGestorePalestra() { return gestorePalestra; }
     public Map<Iscritto, String> getIscritti() { return iscritti; }
     public Map<Abbonamento, Integer> getAbbonamenti() { return abbonamenti; }
+    public Map<Prenotazione, Integer> getPrenotazioni() { return prenotazioni; }
+    public Map<Corso, String> getCorsi() { return corsi; }
+    public Map<Lezione, String> getLezioni() { return lezioni; }
+    public Sala getSala() { return sala; }
+    public void setSala(Sala sala) { this.sala = sala; }
     public AbbonamentoFactory getAbbonamentoFactory() { return abbonamentoFactory; }
     public void setAbbonamentoFactory(AbbonamentoFactory factory) { this.abbonamentoFactory = factory; }
+    public CalendarioLezioni getCalendarioLezioni() { return calendarioLezioni; }
+    public void setCalendarioLezioni(CalendarioLezioni calendarioLezioni) { this.calendarioLezioni = calendarioLezioni; }
 }
