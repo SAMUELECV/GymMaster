@@ -327,6 +327,141 @@ public class GymMasterTest {
     }
     
     @Test
+    @DisplayName("UC7 - Test inserisci nuovo corso")
+    void testInserisciNuovoCorso() {
+        Corso corso = gymMaster.inserisciNuovoCorso("Yoga", "Corso yoga", "Marco Zen");
+        
+        assertNotNull(corso);
+        assertEquals("Yoga", corso.getNomecorso());
+        assertEquals(1, gymMaster.getCorsi().size());
+    }
+    
+    @Test
+    @DisplayName("UC7 - Test inserimento lezioni")
+    void testInserimentoLezioni() {
+        gymMaster.inserisciNuovoCorso("Yoga", "Corso yoga", "Marco Zen");
+        
+        Lezione lezione = gymMaster.inserimentoLezioni("Lunedi", 10.0, 15, 20, 1.5, 
+                                                       StatoLezione.NON_INIZIATA, new Date(), "Marco Zen", "YOG001");
+        
+        assertNotNull(lezione);
+        assertEquals("YOG001", lezione.getIDLezione());
+        assertEquals(StatoLezione.NON_INIZIATA, lezione.getStatolezione());
+        assertEquals(1, gymMaster.getLezioni().size());
+    }
+    
+    @Test
+    @DisplayName("UC7 - Test inserimento lezione registra CalendarioLezioni come Observer")
+    void testInserimentoLezioneRegistraObserver() {
+        gymMaster.inserisciNuovoCorso("Yoga", "Corso yoga", "Marco Zen");
+        
+        Lezione lezione = gymMaster.inserimentoLezioni("Lunedi", 10.0, 15, 20, 1.5, 
+                                                       StatoLezione.NON_INIZIATA, new Date(), "Marco Zen", "YOG001");
+        
+        assertNotNull(lezione);
+        assertEquals(1, lezione.getObservers().size());
+        assertTrue(lezione.getObservers().contains(gymMaster.getCalendarioLezioni()));
+    }
+    
+    @Test
+    @DisplayName("UC8 - Test seleziona lezione specifica")
+    void testSelezionaLezioneSpecifica() {
+        gymMaster.inserisciNuovoCorso("Yoga", "Corso yoga", "Marco Zen");
+        gymMaster.inserimentoLezioni("Lunedi", 10.0, 15, 20, 1.5, 
+                                    StatoLezione.NON_INIZIATA, new Date(), "Marco Zen", "YOG001");
+        
+        Lezione lezione = gymMaster.selezionaLezioneSpecifica("YOG001");
+        
+        assertNotNull(lezione);
+        assertEquals("YOG001", lezione.getIDLezione());
+    }
+    
+    @Test
+    @DisplayName("UC8 - Test seleziona lezione inesistente")
+    void testSelezionaLezioneInesistente() {
+        Lezione lezione = gymMaster.selezionaLezioneSpecifica("INESISTENTE");
+        assertNull(lezione);
+    }
+    
+    @Test
+    @DisplayName("UC8 - Test get/set opzione")
+    void testGetSetOpzione() {
+        assertEquals("", gymMaster.getOpzione());
+        
+        gymMaster.setOpzione("Lunedi");
+        assertEquals("Lunedi", gymMaster.getOpzione());
+    }
+    
+        @Test
+    @DisplayName("UC3 - Test prenotazione completa con Observer")
+    void testPrenotazioneCompletaConObserver() {
+        creaIscrittoStandard();
+        gymMaster.creaNuovoTipoAbbonamento("MENSILE", "Completo", durataMensile, 49.99, true);
+        gymMaster.attivaAbbonamento(CF1);
+        gymMaster.selezionaTipologieAbbonamento("MENSILE");
+        gymMaster.confermaAttivazione(CF1);
+        
+        gymMaster.inserisciNuovoCorso("Yoga", "Corso yoga", "Marco Zen");
+        Date dataLezione = new Date();
+        Lezione lezione = gymMaster.inserimentoLezioni("Lunedi", 10.0, 15, 20, 1.5, 
+                                    StatoLezione.NON_INIZIATA, dataLezione, "Marco Zen", "YOG001");
+        
+        CalendarioLezioni cal = gymMaster.getCalendarioLezioni();
+        assertEquals(0, cal.getObserverState());
+        
+        gymMaster.visualizzaLezioniECorsi(CF1);
+        gymMaster.selezionaCorso("Yoga");
+        Prenotazione prenotazione = gymMaster.prenotaLezione(dataLezione, 10.0);
+        
+        assertNotNull(prenotazione);
+        assertEquals(StatoPrenotazione.EFFETTUATA, prenotazione.getStatoprenotazione());
+        assertEquals(1, gymMaster.getPrenotazioni().size());
+        assertEquals(1, cal.getObserverState());
+        assertEquals(14, lezione.getPostidisponibili());
+    }
+    
+    @Test
+    @DisplayName("UC3 - Test prenotazioni multiple notificano Observer")
+    void testPrenotazioniMultipleNotificanoObserver() {
+        creaIscrittoStandard();
+        gymMaster.creaNuovoTipoAbbonamento("MENSILE", "Completo", durataMensile, 49.99, true);
+        gymMaster.attivaAbbonamento(CF1);
+        gymMaster.selezionaTipologieAbbonamento("MENSILE");
+        gymMaster.confermaAttivazione(CF1);
+        
+        gymMaster.inserisciNuovoCorso("Yoga", "Corso yoga", "Marco Zen");
+        Date dataLezione = new Date();
+        gymMaster.inserimentoLezioni("Lunedi", 10.0, 15, 20, 1.5, 
+                                    StatoLezione.NON_INIZIATA, dataLezione, "Marco Zen", "YOG001");
+        
+        CalendarioLezioni cal = gymMaster.getCalendarioLezioni();
+        
+        gymMaster.visualizzaLezioniECorsi(CF1);
+        gymMaster.selezionaCorso("Yoga");
+        gymMaster.prenotaLezione(dataLezione, 10.0);
+        assertEquals(1, cal.getObserverState());
+        
+        gymMaster.visualizzaLezioniECorsi(CF1);
+        gymMaster.selezionaCorso("Yoga");
+        gymMaster.prenotaLezione(dataLezione, 10.0);
+        assertEquals(2, cal.getObserverState());
+    }
+    
+    @Test
+    @DisplayName("UC4 - Test visualizza prenotazioni iscritto inesistente")
+    void testVisualizzaPrenotazioniIscrittoInesistente() {
+        boolean risultato = gymMaster.visualizzaPrenotazioni("CFINESISTENTE");
+        assertFalse(risultato);
+    }
+    
+    @Test
+    @DisplayName("UC4 - Test seleziona prenotazione inesistente")
+    void testSelezionaPrenotazioneInesistente() {
+        boolean risultato = gymMaster.selezionaPrenotazione(999, "10.0");
+        assertFalse(risultato);
+    }
+    
+    @Test
     @DisplayName("Test getters mappe")
     void testGettersMappe() {
         assertNotNull(gymMaster.getIscritti());

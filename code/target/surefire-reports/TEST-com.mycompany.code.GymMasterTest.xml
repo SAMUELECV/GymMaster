@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.mycompany.code.GymMasterTest" time="0.314" tests="25" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.mycompany.code.GymMasterTest" time="0.848" tests="35" errors="0" skipped="0" failures="0">
   <properties>
-    <property name="jpda.address" value="52804"/>
+    <property name="jpda.address" value="49226"/>
     <property name="java.specification.version" value="22"/>
     <property name="sun.cpu.isalist" value="amd64"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
@@ -17,7 +17,7 @@
     <property name="user.country" value="IT"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-22\bin"/>
-    <property name="sun.java.command" value="C:\Users\carlo\AppData\Local\Temp\surefire5570047540403317259\surefirebooter-20260221121749984_3.jar C:\Users\carlo\AppData\Local\Temp\surefire5570047540403317259 2026-02-21T12-17-49_695-jvmRun1 surefire-20260221121749984_1tmp surefire_0-20260221121749984_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\carlo\AppData\Local\Temp\surefire709227419592925333\surefirebooter-20260221170028630_3.jar C:\Users\carlo\AppData\Local\Temp\surefire709227419592925333 2026-02-21T17-00-28_196-jvmRun1 surefire-20260221170028630_1tmp surefire_0-20260221170028630_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="test" value="com.mycompany.code.GymMasterTest"/>
     <property name="surefire.test.class.path" value="C:\Users\carlo\OneDrive - Università degli Studi di Catania\Desktop\GymMaster\code\target\test-classes;C:\Users\carlo\OneDrive - Università degli Studi di Catania\Desktop\GymMaster\code\target\classes;C:\Users\carlo\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\carlo\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\carlo\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\carlo\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\carlo\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\carlo\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\carlo\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;"/>
@@ -33,7 +33,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\carlo\AppData\Local\Temp\surefire5570047540403317259\surefirebooter-20260221121749984_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\carlo\AppData\Local\Temp\surefire709227419592925333\surefirebooter-20260221170028630_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="22.0.2+9-70"/>
@@ -62,74 +62,124 @@
     <property name="java.vm.version" value="22.0.2+9-70"/>
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="66.0"/>
-    <property name="maven.surefire.debug" value="-agentlib:jdwp=transport=dt_socket,server=n,address=52804"/>
+    <property name="maven.surefire.debug" value="-agentlib:jdwp=transport=dt_socket,server=n,address=49226"/>
   </properties>
-  <testcase name="testAbbonamentoGiaAttivo" classname="com.mycompany.code.GymMasterTest" time="0.106">
+  <testcase name="testAbbonamentoGiaAttivo" classname="com.mycompany.code.GymMasterTest" time="0.145">
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 Tipo abbonamento creato con successo: MENSILE
 Iscritto trovato: Luca Bianchi
 Tipologia selezionata: MENSILE
 Factory: MensileFactory
 Abbonamento MENSILE creato - ID: 1
-Inizio: Sat Feb 21 12:17:51 CET 2026 | Fine: Mon Mar 23 12:17:51 CET 2026
+Inizio: Sat Feb 21 17:00:30 CET 2026 | Fine: Mon Mar 23 17:00:30 CET 2026
 Abbonamento attivato con successo! ID: 1
-Abbonamento valido fino a: Mon Mar 23 12:17:51 CET 2026
+Abbonamento valido fino a: Mon Mar 23 17:00:30 CET 2026
 Impossibile attivare un nuovo abbonamento: l'iscritto Luca Bianchi possiede gia' un abbonamento attivo!
 ID Abbonamento attivo: 1
-Scadenza: lunedì 23 marzo 2026 12:17:51
+Scadenza: lunedì 23 marzo 2026 17:00:30
 ]]></system-out>
   </testcase>
-  <testcase name="testConfermaAttivazioneTrimestrle" classname="com.mycompany.code.GymMasterTest" time="0.009">
+  <testcase name="testConfermaAttivazioneTrimestrle" classname="com.mycompany.code.GymMasterTest" time="0.013">
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 Tipo abbonamento creato con successo: TRIMESTRALE
 Iscritto trovato: Luca Bianchi
 Tipologia selezionata: TRIMESTRALE
 Factory: TrimestraleFactory
 Abbonamento TRIMESTRALE creato - ID: 1
-Inizio: Sat Feb 21 12:17:51 CET 2026 | Fine: Fri May 22 12:17:51 CEST 2026
+Inizio: Sat Feb 21 17:00:31 CET 2026 | Fine: Fri May 22 17:00:31 CEST 2026
 Abbonamento attivato con successo! ID: 1
 ]]></system-out>
   </testcase>
-  <testcase name="testEsisteTipoAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.004">
+  <testcase name="testEsisteTipoAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.005">
     <system-out><![CDATA[Tipo abbonamento creato con successo: MENSILE
 ]]></system-out>
   </testcase>
-  <testcase name="testModificaTipoAbbonamentoInesistente" classname="com.mycompany.code.GymMasterTest" time="0.005"/>
-  <testcase name="testConfermaAttivazioneMensile" classname="com.mycompany.code.GymMasterTest" time="0.003">
+  <testcase name="testModificaTipoAbbonamentoInesistente" classname="com.mycompany.code.GymMasterTest" time="0.014"/>
+  <testcase name="testConfermaAttivazioneMensile" classname="com.mycompany.code.GymMasterTest" time="0.004">
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 Tipo abbonamento creato con successo: MENSILE
 Iscritto trovato: Luca Bianchi
 Tipologia selezionata: MENSILE
 Factory: MensileFactory
 Abbonamento MENSILE creato - ID: 2
-Inizio: Sat Feb 21 12:17:51 CET 2026 | Fine: Mon Mar 23 12:17:51 CET 2026
+Inizio: Sat Feb 21 17:00:31 CET 2026 | Fine: Mon Mar 23 17:00:31 CET 2026
 Abbonamento attivato con successo! ID: 2
 ]]></system-out>
   </testcase>
-  <testcase name="testGeneraCodiceTessera" classname="com.mycompany.code.GymMasterTest" time="0.005">
-    <system-out><![CDATA[Codice tessera generato: 59828
+  <testcase name="testGeneraCodiceTessera" classname="com.mycompany.code.GymMasterTest" time="0.038">
+    <system-out><![CDATA[Codice tessera generato: 34483
 ]]></system-out>
   </testcase>
-  <testcase name="testAttivaAbbonamentoIscrittoEsistente" classname="com.mycompany.code.GymMasterTest" time="0.004">
+  <testcase name="testAttivaAbbonamentoIscrittoEsistente" classname="com.mycompany.code.GymMasterTest" time="0.007">
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 Iscritto trovato: Luca Bianchi
 ]]></system-out>
   </testcase>
-  <testcase name="testSelezionaTipoAbbonamentoInesistente" classname="com.mycompany.code.GymMasterTest" time="0.002">
+  <testcase name="testInserimentoLezioni" classname="com.mycompany.code.GymMasterTest" time="0.029">
+    <system-out><![CDATA[Corso creato: Yoga
+Observer aggiunto: CalendarioLezioni
+Lezione creata: YOG001
+]]></system-out>
+  </testcase>
+  <testcase name="testSelezionaTipoAbbonamentoInesistente" classname="com.mycompany.code.GymMasterTest" time="0.013">
     <system-out><![CDATA[Tipo abbonamento non trovato!
 ]]></system-out>
   </testcase>
-  <testcase name="testSalvaAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.003">
+  <testcase name="testGetSetOpzione" classname="com.mycompany.code.GymMasterTest" time="0.005"/>
+  <testcase name="testPrenotazioneCompletaConObserver" classname="com.mycompany.code.GymMasterTest" time="0.119">
+    <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
+Tipo abbonamento creato con successo: MENSILE
+Iscritto trovato: Luca Bianchi
+Tipologia selezionata: MENSILE
+Factory: MensileFactory
+Abbonamento MENSILE creato - ID: 3
+Inizio: Sat Feb 21 17:00:31 CET 2026 | Fine: Mon Mar 23 17:00:31 CET 2026
+Abbonamento attivato con successo! ID: 3
+Corso creato: Yoga
+Observer aggiunto: CalendarioLezioni
+Lezione creata: YOG001
+Abbonamento valido fino a: Mon Mar 23 17:00:31 CET 2026
+
+=== CORSI DISPONIBILI ===
+- Yoga | Istruttore: Marco Zen
+
+=== LEZIONI DISPONIBILI ===
+- YOG001 | Lunedi | Ora: 10.0 | Posti: 15
+
+--- Lezioni del corso Yoga ---
+- YOG001 | Lunedi | Ora: 10.0
+Stato prenotazione: EFFETTUATA
+Posti disponibili aggiornati: 14/20
+[Observer] CalendarioLezioni: notifica ricevuta - aggiornamento #1
+[Observer] CalendarioLezioni: vista del calendario aggiornata automaticamente.
+]]></system-out>
+  </testcase>
+  <testcase name="testSalvaAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.006">
     <system-out><![CDATA[Abbonamento salvato - ID: 99
 ]]></system-out>
   </testcase>
-  <testcase name="testSelezionaTipoAbbonamentoAnnualeConFactory" classname="com.mycompany.code.GymMasterTest" time="0.003">
+  <testcase name="testSelezionaTipoAbbonamentoAnnualeConFactory" classname="com.mycompany.code.GymMasterTest" time="0.019">
     <system-out><![CDATA[Tipo abbonamento creato con successo: ANNUALE
 Tipologia selezionata: ANNUALE
 Factory: AnnualeFactory
 ]]></system-out>
   </testcase>
-  <testcase name="testMostraTipologieAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.013">
+  <testcase name="testSelezionaLezioneSpecifica" classname="com.mycompany.code.GymMasterTest" time="0.013">
+    <system-out><![CDATA[Corso creato: Yoga
+Observer aggiunto: CalendarioLezioni
+Lezione creata: YOG001
+
+--- Dettagli Lezione ---
+ID: YOG001
+Giorno: Lunedi
+Ora inizio: 10.0
+Durata: 1.5 ore
+Istruttore: Marco Zen
+Posti disponibili: 15/20
+Stato: NON_INIZIATA
+]]></system-out>
+  </testcase>
+  <testcase name="testMostraTipologieAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.021">
     <system-out><![CDATA[
 --- Tipologie abbonamento disponibili ---
 Nessuna tipologia disponibile.
@@ -139,7 +189,7 @@ Tipo abbonamento creato con successo: MENSILE
 - MENSILE | 29.99 euro | Lezioni: Si
 ]]></system-out>
   </testcase>
-  <testcase name="testConfermaAttivazioneSenzaFactory" classname="com.mycompany.code.GymMasterTest" time="0.004">
+  <testcase name="testConfermaAttivazioneSenzaFactory" classname="com.mycompany.code.GymMasterTest" time="0.006">
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 Tipo abbonamento creato con successo: Premium
 Iscritto trovato: Luca Bianchi
@@ -148,20 +198,30 @@ Tipologia non riconosciuta per la factory!
 Nessuna factory selezionata!
 ]]></system-out>
   </testcase>
-  <testcase name="testRegistraIscrittoDuplicato" classname="com.mycompany.code.GymMasterTest" time="0.006">
+  <testcase name="testInserisciNuovoCorso" classname="com.mycompany.code.GymMasterTest" time="0.012">
+    <system-out><![CDATA[Corso creato: Yoga
+]]></system-out>
+  </testcase>
+  <testcase name="testRegistraIscrittoDuplicato" classname="com.mycompany.code.GymMasterTest" time="0.004">
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 Iscritto gia' presente!
 ]]></system-out>
   </testcase>
-  <testcase name="testGestorePalestra" classname="com.mycompany.code.GymMasterTest" time="0.002"/>
-  <testcase name="testConfermaAttivazioneSenzaTipologia" classname="com.mycompany.code.GymMasterTest" time="0.002">
+  <testcase name="testInserimentoLezioneRegistraObserver" classname="com.mycompany.code.GymMasterTest" time="0.004">
+    <system-out><![CDATA[Corso creato: Yoga
+Observer aggiunto: CalendarioLezioni
+Lezione creata: YOG001
+]]></system-out>
+  </testcase>
+  <testcase name="testGestorePalestra" classname="com.mycompany.code.GymMasterTest" time="0.005"/>
+  <testcase name="testConfermaAttivazioneSenzaTipologia" classname="com.mycompany.code.GymMasterTest" time="0.009">
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 Iscritto trovato: Luca Bianchi
 Nessuna tipologia abbonamento selezionata!
 ]]></system-out>
   </testcase>
   <testcase name="testGetSetAbbonamentoFactory" classname="com.mycompany.code.GymMasterTest" time="0.007"/>
-  <testcase name="testSelezionaTipoAbbonamentoTrimestraleConFactory" classname="com.mycompany.code.GymMasterTest" time="0.004">
+  <testcase name="testSelezionaTipoAbbonamentoTrimestraleConFactory" classname="com.mycompany.code.GymMasterTest" time="0.005">
     <system-out><![CDATA[Tipo abbonamento creato con successo: TRIMESTRALE
 Tipologia selezionata: TRIMESTRALE
 Factory: TrimestraleFactory
@@ -171,43 +231,97 @@ Factory: TrimestraleFactory
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 ]]></system-out>
   </testcase>
-  <testcase name="testConfermaAttivazioneAnnuale" classname="com.mycompany.code.GymMasterTest" time="0.006">
+  <testcase name="testConfermaAttivazioneAnnuale" classname="com.mycompany.code.GymMasterTest" time="0.005">
     <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
 Tipo abbonamento creato con successo: ANNUALE
 Iscritto trovato: Luca Bianchi
 Tipologia selezionata: ANNUALE
 Factory: AnnualeFactory
 Abbonamento ANNUALE creato - ID: 1
-Inizio: Sat Feb 21 12:17:51 CET 2026 | Fine: Sun Feb 21 12:17:51 CET 2027
+Inizio: Sat Feb 21 17:00:31 CET 2026 | Fine: Sun Feb 21 17:00:31 CET 2027
 Abbonamento attivato con successo! ID: 1
 ]]></system-out>
   </testcase>
-  <testcase name="testAttivaAbbonamentoIscrittoInesistente" classname="com.mycompany.code.GymMasterTest" time="0.005">
+  <testcase name="testAttivaAbbonamentoIscrittoInesistente" classname="com.mycompany.code.GymMasterTest" time="0.004">
     <system-out><![CDATA[Iscritto non trovato!
 ]]></system-out>
   </testcase>
-  <testcase name="testGettersMappe" classname="com.mycompany.code.GymMasterTest" time="0.004"/>
-  <testcase name="testConfermaAttivazioneSenzaIscritto" classname="com.mycompany.code.GymMasterTest" time="0.002">
+  <testcase name="testGettersMappe" classname="com.mycompany.code.GymMasterTest" time="0.003"/>
+  <testcase name="testConfermaAttivazioneSenzaIscritto" classname="com.mycompany.code.GymMasterTest" time="0.004">
     <system-out><![CDATA[Tipo abbonamento creato con successo: MENSILE
 Tipologia selezionata: MENSILE
 Factory: MensileFactory
 Nessun iscritto selezionato!
 ]]></system-out>
   </testcase>
-  <testcase name="testSelezionaTipoAbbonamentoMensileConFactory" classname="com.mycompany.code.GymMasterTest" time="0.006">
+  <testcase name="testSelezionaPrenotazioneInesistente" classname="com.mycompany.code.GymMasterTest" time="0.005">
+    <system-out><![CDATA[Prenotazione non trovata!
+]]></system-out>
+  </testcase>
+  <testcase name="testSelezionaTipoAbbonamentoMensileConFactory" classname="com.mycompany.code.GymMasterTest" time="0.007">
     <system-out><![CDATA[Tipo abbonamento creato con successo: MENSILE
 Tipologia selezionata: MENSILE
 Factory: MensileFactory
 ]]></system-out>
   </testcase>
-  <testcase name="testModificaTipoAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.003">
+  <testcase name="testVisualizzaPrenotazioniIscrittoInesistente" classname="com.mycompany.code.GymMasterTest" time="0.005">
+    <system-out><![CDATA[Iscritto non trovato!
+]]></system-out>
+  </testcase>
+  <testcase name="testModificaTipoAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.012">
     <system-out><![CDATA[Tipo abbonamento creato con successo: MENSILE
 Tipo abbonamento aggiornato: MENSILE
 Tipo abbonamento modificato con successo!
 ]]></system-out>
   </testcase>
-  <testcase name="testCreaNuovoTipoAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.003">
+  <testcase name="testCreaNuovoTipoAbbonamento" classname="com.mycompany.code.GymMasterTest" time="0.006">
     <system-out><![CDATA[Tipo abbonamento creato con successo: MENSILE
+]]></system-out>
+  </testcase>
+  <testcase name="testSelezionaLezioneInesistente" classname="com.mycompany.code.GymMasterTest" time="0.008">
+    <system-out><![CDATA[Lezione non trovata!
+]]></system-out>
+  </testcase>
+  <testcase name="testPrenotazioniMultipleNotificanoObserver" classname="com.mycompany.code.GymMasterTest" time="0.032">
+    <system-out><![CDATA[Iscritto aggiunto: Bianchi Luca
+Tipo abbonamento creato con successo: MENSILE
+Iscritto trovato: Luca Bianchi
+Tipologia selezionata: MENSILE
+Factory: MensileFactory
+Abbonamento MENSILE creato - ID: 4
+Inizio: Sat Feb 21 17:00:31 CET 2026 | Fine: Mon Mar 23 17:00:31 CET 2026
+Abbonamento attivato con successo! ID: 4
+Corso creato: Yoga
+Observer aggiunto: CalendarioLezioni
+Lezione creata: YOG001
+Abbonamento valido fino a: Mon Mar 23 17:00:31 CET 2026
+
+=== CORSI DISPONIBILI ===
+- Yoga | Istruttore: Marco Zen
+
+=== LEZIONI DISPONIBILI ===
+- YOG001 | Lunedi | Ora: 10.0 | Posti: 15
+
+--- Lezioni del corso Yoga ---
+- YOG001 | Lunedi | Ora: 10.0
+Stato prenotazione: EFFETTUATA
+Posti disponibili aggiornati: 14/20
+[Observer] CalendarioLezioni: notifica ricevuta - aggiornamento #1
+[Observer] CalendarioLezioni: vista del calendario aggiornata automaticamente.
+Abbonamento valido fino a: Mon Mar 23 17:00:31 CET 2026
+
+=== CORSI DISPONIBILI ===
+- Yoga | Istruttore: Marco Zen
+
+=== LEZIONI DISPONIBILI ===
+- YOG001 | Lunedi | Ora: 10.0 | Posti: 14
+
+--- Lezioni del corso Yoga ---
+- YOG001 | Lunedi | Ora: 10.0
+Stato prenotazione: EFFETTUATA
+Posti disponibili aggiornati: 13/20
+[Observer] CalendarioLezioni: notifica ricevuta - aggiornamento #2
+[Observer] CalendarioLezioni: vista del calendario aggiornata automaticamente.
 ]]></system-out>
   </testcase>
 </testsuite>
