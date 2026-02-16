@@ -32,7 +32,7 @@ public class Code {
         }
         
         gymMaster = new GymMaster();
-
+        
         gestorePalestra = new GestorePalestra("Giuseppe", "Verdi");
         gymMaster.setGestorePalestra(gestorePalestra);
         
@@ -245,7 +245,7 @@ public class Code {
         Calendar cal = Calendar.getInstance();
         cal.set(1970, 0, durataGiorni);
         Date durata = cal.getTime();
-        
+
         gymMaster.modificaTipoAbbonamento(nome, descrizione, durata, prezzo, lezioni);
     }
     
@@ -296,6 +296,8 @@ public class Code {
             System.out.println("1. Gestisci Iscritti");
             System.out.println("2. Gestisci Abbonamenti");
             System.out.println("3. Gestisci Prenotazioni");
+            System.out.println("4. Registra Accesso");
+            System.out.println("5. Visualizza Abbonamenti in Scadenza");
             System.out.println("0. Torna al menu principale");
             System.out.print("Inserisci il numero corrispondente all'azione desiderata: ");
 
@@ -311,6 +313,12 @@ public class Code {
                         break;
                     case 3:
                         gestisciPrenotazioni(scanner);
+                        break;
+                    case 4:
+                        registraAccesso(scanner);
+                        break;
+                    case 5:
+                        visualizzaAbbonamentiInScadenza(scanner);
                         break;
                     case 0:
                         System.out.println("Uscita dal menu Addetto Segreteria.");
@@ -457,7 +465,7 @@ public class Code {
 
         Abbonamento abbonamento = gymMaster.confermaAttivazione(CF);
         if (abbonamento != null) {
-            System.out.println("  ABBONAMENTO ATTIVATO CON SUCCESSO!");;
+            System.out.println("  ABBONAMENTO ATTIVATO CON SUCCESSO!");
             System.out.println("  ID: " + abbonamento.getIdabbonamento());
             System.out.println("  Tipo: " + tipo.getNomeabbonamento());
             System.out.println("  Factory utilizzata: " + gymMaster.getAbbonamentoFactory().getClass().getSimpleName());
@@ -470,8 +478,8 @@ public class Code {
     private static void gestisciPrenotazioni(Scanner scanner) {
         int scelta;
         do {
-            System.out.println("1. Prenota lezione");
-            System.out.println("2. Cancella prenotazione");
+            System.out.println("1. Prenota lezione (UC3)");
+            System.out.println("2. Cancella prenotazione (UC4)");
             System.out.println("0. Torna indietro");
             System.out.print("Inserisci il numero corrispondente all'azione desiderata: ");
 
@@ -573,6 +581,21 @@ public class Code {
         } else {
             System.out.println("Cancellazione annullata.");
         }
+    }
+    
+    private static void registraAccesso(Scanner scanner) {
+        scanner.nextLine();
+        System.out.print("Inserisci il codice fiscale (CF) dell'iscritto: ");
+        String CF = scanner.nextLine();
+
+        gymMaster.registraAccesso(CF);
+    }
+    
+    private static void visualizzaAbbonamentiInScadenza(Scanner scanner) {
+        System.out.print("Inserisci il numero di giorni entro cui cercare abbonamenti in scadenza: ");
+        int giorni = scanner.nextInt();
+
+        gymMaster.visualizzaAbbonamentiInScadenza(giorni);
     }
     
     public static String formatDate(Date date) {

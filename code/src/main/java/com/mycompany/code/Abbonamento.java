@@ -26,7 +26,7 @@ public class Abbonamento {
         this.tipo = tipo;
         this.statoabbonamento = statoabbonamento;
     }
-    
+
     public boolean controlloScadenza(Date dataodierna) {
         if (dataodierna.after(datafine)) {
             this.statoabbonamento = StatoAbbonamento.SCADUTO;
@@ -35,6 +35,25 @@ public class Abbonamento {
         }
         System.out.println("Abbonamento valido fino a: " + datafine);
         return true;
+    }
+
+    public Abbonamento getAbbonamento(String iCF) {
+        if (this.CFIscritto != null && this.CFIscritto.equals(iCF)) {
+            return this;
+        }
+        return null;
+    }
+    
+    public void getAbbonamentiInScadenza(Date datalimite) {
+        if (this.datafine != null && !this.datafine.after(datalimite) && 
+            this.statoabbonamento == StatoAbbonamento.ATTIVO) {
+            System.out.println("Abbonamento ID: " + idabbonamento + " in scadenza il " + datafine);
+        }
+    }
+    
+    public boolean isInScadenza(Date datalimite) {
+        return this.datafine != null && !this.datafine.after(datalimite) && 
+               this.statoabbonamento == StatoAbbonamento.ATTIVO;
     }
     
     public void setStatoAbbonamento(StatoAbbonamento statoAbbonamento) {

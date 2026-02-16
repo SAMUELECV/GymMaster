@@ -111,6 +111,35 @@ public class AbbonamentoTest {
     }
     
     @Test
+    @DisplayName("Test getAbbonamento per CF")
+    void testGetAbbonamentoByCF() {
+        abbonamento.setCFIscritto("BNCLCU95C15H501Z");
+        
+        Abbonamento trovato = abbonamento.getAbbonamento("BNCLCU95C15H501Z");
+        assertNotNull(trovato);
+        assertEquals(abbonamento, trovato);
+        
+        Abbonamento nonTrovato = abbonamento.getAbbonamento("CFINESISTENTE");
+        assertNull(nonTrovato);
+    }
+    
+    @Test
+    @DisplayName("Test isInScadenza")
+    void testIsInScadenza() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, 2);
+        Date dataLimite = cal.getTime();
+        
+        assertTrue(abbonamento.isInScadenza(dataLimite));
+        
+        cal.setTime(new Date());
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        Date dataLimitePassata = cal.getTime();
+        
+        assertFalse(abbonamento.isInScadenza(dataLimitePassata));
+    }
+    
+    @Test
     @DisplayName("Test setTipo abbonamento")
     void testSetTipo() {
         Calendar calDurata = Calendar.getInstance();

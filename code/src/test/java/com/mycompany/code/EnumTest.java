@@ -24,4 +24,23 @@ public class EnumTest {
         assertEquals(StatoAbbonamento.SCADUTO, StatoAbbonamento.valueOf("SCADUTO"));
     }
 
+        @Test
+    @DisplayName("Test StatoPrenotazione values")
+    void testStatoPrenotazioneValues() {
+        StatoPrenotazione[] stati = StatoPrenotazione.values();
+        assertEquals(2, stati.length);
+        assertEquals(StatoPrenotazione.EFFETTUATA, StatoPrenotazione.valueOf("EFFETTUATA"));
+        assertEquals(StatoPrenotazione.ANNULLATA, StatoPrenotazione.valueOf("ANNULLATA"));
+    }
+    
+    @Test
+    @DisplayName("Test StatoLezione values")
+    void testStatoLezioneValues() {
+        StatoLezione[] stati = StatoLezione.values();
+        assertEquals(4, stati.length);
+        assertEquals(StatoLezione.IN_CORSO, StatoLezione.valueOf("IN_CORSO"));
+        assertEquals(StatoLezione.TERMINATA, StatoLezione.valueOf("TERMINATA"));
+        assertEquals(StatoLezione.NON_INIZIATA, StatoLezione.valueOf("NON_INIZIATA"));
+        assertEquals(StatoLezione.ANNULLATA, StatoLezione.valueOf("ANNULLATA"));
+    }
 }

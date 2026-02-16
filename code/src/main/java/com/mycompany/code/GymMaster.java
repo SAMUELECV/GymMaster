@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -22,9 +22,7 @@ public class GymMaster {
     private Map<Prenotazione, Integer> prenotazioni;
     private Map<Corso, String> corsi;
     private Map<Lezione, String> lezioni;
-    
-    private Sala sala; //sala unica per semplicità
-    
+    private Sala sala;
     private GestorePalestra gestorePalestra;
     private TipoAbbonamento tipoAbbonamentoSelezionato;
     private Iscritto iscrittoCorrente;
@@ -41,11 +39,12 @@ public class GymMaster {
     
     public GymMaster() {
         this.iscritti = new HashMap<>();
-        this.abbonamenti = new HashMap<>(); 
+        this.abbonamenti = new HashMap<>();
         this.prenotazioni = new HashMap<>();
         this.corsi = new HashMap<>();
         this.lezioni = new HashMap<>();
         this.sala = null;
+        
         this.gestorePalestra = null;
         this.tipoAbbonamentoSelezionato = null;
         this.iscrittoCorrente = null;
@@ -86,7 +85,7 @@ public class GymMaster {
         return null;
     }
     
-        private Prenotazione findPrenotazioneById(int id) {
+    private Prenotazione findPrenotazioneById(int id) {
         for (Map.Entry<Prenotazione, Integer> entry : prenotazioni.entrySet()) {
             if (entry.getValue().equals(id)) {
                 return entry.getKey();
@@ -121,7 +120,7 @@ public class GymMaster {
         }
         return null;
     }
-    
+
     public Iscritto registraNuovoIscritto(String nomeiscritto, String cognome, Date datadinascita,
                                          String CF, String telefono, String email, String indirizzo) {
         if (findIscrittoByCF(CF) != null) {
@@ -151,7 +150,7 @@ public class GymMaster {
             System.out.println("Registrazione completata con successo!");
         }
     }
-    
+
     public Iscritto attivaAbbonamento(String CF) {
         Iscritto i = findIscrittoByCF(CF);
         if (i != null) {
@@ -166,7 +165,6 @@ public class GymMaster {
                     }
                 }
             }
-
             this.iscrittoCorrente = i;
             System.out.println("Iscritto trovato: " + i.getNomeiscritto() + " " + i.getCognome());
             return i;
@@ -174,7 +172,7 @@ public class GymMaster {
         System.out.println("Iscritto non trovato!");
         return null;
     }
-    
+
     public TipoAbbonamento creaNuovoTipoAbbonamento(String nomeabbonamento, String descrizione,
                                                      Date durata, double prezzo, boolean lezione) {
         if (gestorePalestra == null) {
@@ -183,7 +181,7 @@ public class GymMaster {
         }
         return gestorePalestra.creaNuovoTipoAbbonamento(nomeabbonamento, descrizione, durata, prezzo, lezione);
     }
-    
+
     public void modificaTipoAbbonamento(String nuovonomeabbonamento, String nuovadescrizione,
                                         Date nuovadurata, double nuovoprezzo, boolean nuovalezionedigruppo) {
         if (gestorePalestra == null) {
@@ -531,6 +529,74 @@ public class GymMaster {
         }
         System.out.println("Lezione non trovata!");
         return null;
+    }
+    
+    public void registraAccesso(String CF) {
+        System.out.println("\n=== REGISTRAZIONE ACCESSO ===");
+        
+        Iscritto i = findIscrittoByCF(CF);
+        if (i == null) {
+            System.out.println("Iscritto non trovato!");
+            return;
+        }
+        this.iscrittoCorrente = i;
+        System.out.println("Iscritto: " + i.getNomeiscritto() + " " + i.getCognome());
+        
+        Abbonamento a = findAbbonamentoByCF(i.getCF());
+        if (a == null) {
+            System.out.println("Nessun abbonamento trovato!");
+            return;
+        }
+        
+        System.out.println("Abbonamento ID: " + a.getIdabbonamento() + " | Stato: " + a.getStatoabbonamento());
+        
+        if (a.getStatoabbonamento() != StatoAbbonamento.SCADUTO && 
+            a.getStatoabbonamento() != StatoAbbonamento.SOSPESO) {
+            registraAbbonamento(i.getCodicetessera());
+        } else {
+            System.out.println("         ACCESSO NEGATO                  ");
+            System.out.println("   Abbonamento: " + a.getStatoabbonamento());
+        }
+    }
+    
+    public void registraAbbonamento(int codicetessera) {
+        System.out.println("         ACCESSO CONSENTITO              ");
+        System.out.println("  Codice Tessera: " + codicetessera);
+        System.out.println("  Data/Ora: " + sdfOutput.format(new Date()));
+    }
+    
+    public void visualizzaAbbonamentiInScadenza(int numerogiorni) {
+        System.out.println("\n=== ABBONAMENTI IN SCADENZA (entro " + numerogiorni + " giorni) ===");
+        
+        Date datalimite = calcolaDataLimite(numerogiorni);
+        System.out.println("Data limite: " + sdfOutput.format(datalimite));
+        
+        boolean trovati = false;
+        for (Abbonamento a : abbonamenti.keySet()) {
+            a.getAbbonamentiInScadenza(datalimite);
+            
+            if (a.isInScadenza(datalimite)) {
+                Iscritto i = findIscrittoByCF(a.getCFIscritto());
+                if (i != null) {
+                    trovati = true;
+                    System.out.println(" ABBONAMENTO ID: " + a.getIdabbonamento());
+                    System.out.println(" Scadenza: " + sdfOutput.format(a.getDatafine()));
+                    System.out.println(" Iscritto: " + i.getNomeiscritto() + " " + i.getCognome());
+                    System.out.println(" Email: " + i.getEmail());
+                    System.out.println(" Telefono: " + i.getTelefono());
+                }
+            }
+        }
+        
+        if (!trovati) {
+            System.out.println("Nessun abbonamento in scadenza nei prossimi " + numerogiorni + " giorni.");
+        }
+    }
+    
+    public Date calcolaDataLimite(int numerogiorni) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, numerogiorni);
+        return cal.getTime();
     }
     
     public void setGestorePalestra(GestorePalestra gestore) { this.gestorePalestra = gestore; }

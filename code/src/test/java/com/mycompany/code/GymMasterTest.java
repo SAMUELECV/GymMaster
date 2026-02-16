@@ -31,6 +31,9 @@ public class GymMasterTest {
         GestorePalestra gestore = new GestorePalestra("Giuseppe", "Verdi");
         gymMaster.setGestorePalestra(gestore);
         
+        Sala sala = new Sala(1);
+        gymMaster.setSala(sala);
+        
         Calendar cal = Calendar.getInstance();
         cal.set(1970, 0, 31);
         durataMensile = cal.getTime();
@@ -392,7 +395,7 @@ public class GymMasterTest {
         assertEquals("Lunedi", gymMaster.getOpzione());
     }
     
-        @Test
+    @Test
     @DisplayName("UC3 - Test prenotazione completa con Observer")
     void testPrenotazioneCompletaConObserver() {
         creaIscrittoStandard();
@@ -462,10 +465,79 @@ public class GymMasterTest {
     }
     
     @Test
+    @DisplayName("UC5 - Test registra accesso CF inesistente")
+    void testRegistraAccessoCFInesistente() {
+        assertDoesNotThrow(() -> gymMaster.registraAccesso("CFINESISTENTE"));
+    }
+    
+    @Test
+    @DisplayName("UC6 - Test calcola data limite")
+    void testCalcolaDataLimite() {
+        Date dataLimite = gymMaster.calcolaDataLimite(30);
+        
+        assertNotNull(dataLimite);
+        
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, 30);
+        
+        long diffInMillis = Math.abs(dataLimite.getTime() - cal.getTime().getTime());
+        long diffInMinutes = diffInMillis / (1000 * 60);
+        assertTrue(diffInMinutes < 5);
+    }
+    
+    @Test
+    @DisplayName("Observer - CalendarioLezioni inizializzato nel costruttore")
+    void testCalendarioLezioniInizializzato() {
+        assertNotNull(gymMaster.getCalendarioLezioni());
+        assertEquals(0, gymMaster.getCalendarioLezioni().getObserverState());
+    }
+    
+    @Test
+    @DisplayName("Observer - getter/setter CalendarioLezioni")
+    void testGetSetCalendarioLezioni() {
+        CalendarioLezioni nuovoCal = new CalendarioLezioni();
+        gymMaster.setCalendarioLezioni(nuovoCal);
+        
+        assertEquals(nuovoCal, gymMaster.getCalendarioLezioni());
+    }
+    
+    @Test
+    @DisplayName("Observer - tutte le lezioni create hanno lo stesso CalendarioLezioni come Observer")
+    void testTutteLezioniStessoObserver() {
+        gymMaster.inserisciNuovoCorso("Yoga", "Corso yoga", "Marco Zen");
+        
+        Lezione l1 = gymMaster.inserimentoLezioni("Lunedi", 10.0, 15, 20, 1.5, 
+                                                   StatoLezione.NON_INIZIATA, new Date(), "Marco Zen", "YOG001");
+        Lezione l2 = gymMaster.inserimentoLezioni("Martedi", 11.0, 10, 15, 1.0, 
+                                                   StatoLezione.NON_INIZIATA, new Date(), "Marco Zen", "YOG002");
+        
+        CalendarioLezioni cal = gymMaster.getCalendarioLezioni();
+        
+        assertTrue(l1.getObservers().contains(cal));
+        assertTrue(l2.getObservers().contains(cal));
+        
+        l1.decrementaPostiDisponibili();
+        assertEquals(1, cal.getObserverState());
+        
+        l2.decrementaPostiDisponibili();
+        assertEquals(2, cal.getObserverState());
+    }
+    
+    @Test
     @DisplayName("Test getters mappe")
     void testGettersMappe() {
         assertNotNull(gymMaster.getIscritti());
         assertNotNull(gymMaster.getAbbonamenti());
+        assertNotNull(gymMaster.getCorsi());
+        assertNotNull(gymMaster.getLezioni());
+        assertNotNull(gymMaster.getPrenotazioni());
+    }
+    
+    @Test
+    @DisplayName("Test sala")
+    void testSala() {
+        assertNotNull(gymMaster.getSala());
+        assertEquals(1, gymMaster.getSala().getID());
     }
     
     @Test
